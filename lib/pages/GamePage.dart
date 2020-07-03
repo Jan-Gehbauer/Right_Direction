@@ -5,11 +5,20 @@ import 'package:right_direction/model/Direction.dart';
 
 class GamePage extends StatefulWidget {
 
+  GameLogic gameLogic;
+
+  GamePage(this.gameLogic);
+
   @override
-  State<StatefulWidget> createState() => _GamePageState();
+  State<StatefulWidget> createState() => _GamePageState(gameLogic);
 }
 
 class _GamePageState extends State<GamePage> {
+
+  _GamePageState(gameLogic) {
+
+    gameLogic.start();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:right_direction/pages/StartPage.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:right_direction/pages/GamePage.dart';
 import 'package:right_direction/model/GameLogic.dart';
 
 void main() {
@@ -39,7 +39,7 @@ class _RightDirectionAppState extends State<RightDirectionApp> {
             theme: ThemeData(
                 primarySwatch: Colors.green
             ),
-            home: GamePage()
+            home: StartPage(gameLogic)
         )
     );
   }

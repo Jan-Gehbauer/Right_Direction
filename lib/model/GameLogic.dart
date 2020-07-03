@@ -3,17 +3,24 @@ import 'package:right_direction/model/SpiritLevelViewModel.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:right_direction/model/Direction.dart';
+import 'package:vibration/vibration.dart';
 
 class GameLogic extends Model {
 
   int score;
+  int counter;
+
   Direction direction;
   Timer timer;
   SpiritLevelViewModel spiritLevelViewModel;
 
-  GameLogic() {
+  var timeout = const Duration(seconds: 3);
+  var ms = const Duration(milliseconds: 1);
+
+  void start() {
 
     score = 0;
+    counter = 0;
 
     spiritLevelViewModel = SpiritLevelViewModel();
     spiritLevelViewModel.gameLogic = this;
@@ -21,41 +28,48 @@ class GameLogic extends Model {
     startTimeout(1000);
   }
 
-  int counter = 0;
-
-  var timeout = const Duration(seconds: 3);
-  var ms = const Duration(milliseconds: 1);
-
   startTimeout([int milliseconds]) {
 
     var duration = milliseconds == null ? timeout : ms * milliseconds;
-    return new Timer(duration, roundTimedOut);
+    return timer = new Timer(duration, roundTimedOut);
   }
 
   void movementDetected(Direction direction) {
 
-    if (direction == this.direction) {
-      score ++;
+    if (counter < 25) {
+      if (direction == this.direction) {
+        score ++;
 
-      changeDirection();
+        if (counter < 25) {
+          changeDirection();
 
-      if (counter < 10) {
-        startTimeout(1000);
-      } else {
-        return;
+          counter ++;
+
+          timer.cancel();
+
+          startTimeout(1000);
+        } else {
+          Vibration.vibrate(duration: 500);
+
+          return;
+        }
       }
     }
   }
 
   void roundTimedOut() {
 
-    changeDirection();
+    if (counter < 25) {
+      changeDirection();
 
-    if (counter < 10) {
       counter ++;
+
+      timer.cancel();
 
       startTimeout(1000);
     } else {
+      Vibration.vibrate(duration: 500);
+
       return;
     }
   }
